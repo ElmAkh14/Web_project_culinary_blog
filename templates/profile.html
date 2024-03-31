@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block nav_buttons %}
+<a href="/logout" type="button" class="btn btn-danger">Выйти</a>
+{% endblock %}
+
 {% block content %}
 <h1>{{ current_user.name }} {{ current_user.surname }}</h1>
 {% endblock %}

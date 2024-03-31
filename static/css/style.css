@@ -9,8 +9,18 @@ body {
 }
 
 footer {
-    background-color: #FFFFFF;
-    position: ;
+    background-color: #17263C;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+.footer_element #contacts {
+    color: #FFFFFF;
+}
+
+.footer_element #phone_number {
+    color: #FFFFFF;
 }
 
 #contacts {
@@ -20,4 +30,8 @@ footer {
 
 #phone_number {
     display:inline-block;
+}
+
+.t{
+    color: #17263C;
 }

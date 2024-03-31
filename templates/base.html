@@ -4,19 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>{{title}}</title>
 </head>
 <body>
 <header>
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">Миссия Колонизация Марса</a>
+        <a class="navbar-brand" href="/">Share Recipe</a>
         {% if current_user.is_authenticated %}
-          <a class="navbar-brand" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
+          <a class="navbar-brand" href="/profile">
+              <img src="{{ url_for('static', filename='img/profile.png') }}" alt="">
+          </a>
+        {% block nav_buttons %}{% endblock %}
         {% else %}
           <p>
             <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
@@ -25,7 +28,6 @@
         {% endif %}
     </nav>
 </header>
-<h4>И на марсе будут яблони цвести!</h4>
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
