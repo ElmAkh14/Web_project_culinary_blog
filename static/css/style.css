@@ -1,0 +1,23 @@
+body {
+    background-image: url('/static/img/background image.png');
+}
+
+
+.footer_element {
+    display: flex;
+    justify-content: space-between;
+}
+
+footer {
+    background-color: #FFFFFF;
+    position: ;
+}
+
+#contacts {
+    display:inline-block;
+    margin-right:10px;
+}
+
+#phone_number {
+    display:inline-block;
+}
