@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
 {% block nav_buttons %}
 <a href="/logout" type="button" class="btn btn-danger">Выйти</a>
 {% endblock %}
 
 {% block content %}
-<h1>{{ current_user.name }} {{ current_user.surname }}</h1>
+<div class="profile_header">
+    <h1>{{ current_user.name }} {{ current_user.surname }}</h1>
+</div>
 {% endblock %}

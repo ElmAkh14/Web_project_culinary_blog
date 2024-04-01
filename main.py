@@ -78,7 +78,7 @@ def register():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    return render_template('profile.html', title=f"{current_user.name} {current_user.surname}")
 
 
 @app.route('/logout')
