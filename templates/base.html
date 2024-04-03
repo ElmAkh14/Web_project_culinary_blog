@@ -16,32 +16,41 @@
 <div class="main">
 <header>
     <nav>
-        <div class="rightnavelems">
-            <a class="nav a" href="/">Share Recipe</a>
-            {% if current_user.is_authenticated %}
-                <a class="nav a" href="/profile">
-                    <img src="{{ url_for('static', filename='img/profile.png') }}" alt="">
-                </a>
-            {% block nav_buttons %}{% endblock %}
-            {% else %}
+        <div class="nav">
+            <div class="center_nav_elements">
+                <a class="nav_header" href="/">Обмен рецептами</a>
+            </div>
+            <div class="right_nav_elements">
+                {% if current_user.is_authenticated %}
+                    <a class="nav a" href="/profile">
+                        <img src="{{ url_for('static', filename='img/profile.png') }}" alt="">
+                    </a>
+                {% block nav_buttons %}{% endblock %}
+                {% else %}
+            </div>
+              <p>
+                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                <a class="btn btn-success" href="/login">Войти</a>
+              </p>
+            {% endif %}
         </div>
-          <p>
-            <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-            <a class="btn btn-success" href="/login">Войти</a>
-          </p>
-        {% endif %}
     </nav>
 </header>
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
+<div class="before_footer"></div>
 <footer>
-    <div class="footer_element">
-        <p id="contacts">Наши контакты</p>
-        <a id="phone_number" href="tel:+79527757028">+7-952-775-70-28</a>
+    <div class="footer">
+        <div class="footer_element">
+            <p id="contacts">Наши контакты</p>
+            <a class="phone_number" href="tel:+79527757028">+7-952-775-70-28</a>
+            <a class="phone_number" href="tel:88002233222">8(800)223-32-22</a>
+        </div>
     </div>
 </footer>
 </div>
+{% block scripts %}{% endblock %}
 </body>
 </html>

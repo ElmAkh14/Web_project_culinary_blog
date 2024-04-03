@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Adding a job</h1>
+<h1>Добавление рецепта</h1>
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>
@@ -14,6 +14,26 @@
         {% endfor %}
     </p>
     <p>
+        {{ form.dish_image.label }}<br>
+        {{ form.dish_image() }}<br>
+        {% for error in form.dish_image.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <div id="ingredients">
+        <div class="ingredient_form" id="ingredient_form">
+            {{ form.ingredients() }}<br>
+            {% for error in form.ingredients.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+    <input type="button" value="clickme" onclick="addIngredientsForm()">
+    <p>
         {{ form.content.label }}<br>
         {{ form.content(class="form-control") }}<br>
         {% for error in form.content.errors %}
@@ -22,8 +42,12 @@
             </p>
         {% endfor %}
     </p>
-    <p>{{ form.is_private() }} {{ form.is_private.label }}</p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form.is_private() }} {{ form.is_private.label }}</p>
     <div>{{ message }}</div>
 </form>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/article_form.js') }}"></script>
 {% endblock %}

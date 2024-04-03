@@ -157,6 +157,11 @@ def delete_article(_id: int):
     return redirect('/')
 
 
+@app.route('/article')
+def article():
+    return render_template('article.html')
+
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
@@ -170,4 +175,4 @@ def bad_request(_):
 if __name__ == '__main__':
     global_init(db_file)
     app.debug = True
-    app.run()
+    app.run(host='192.168.0.103')

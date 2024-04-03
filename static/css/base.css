@@ -5,44 +5,58 @@ body {
 
 .main {
     color: white;
+    min-height: 652px;
     position: relative;
 }
 
-.footer_element {
-    display: flex;
-    justify-content: space-between;
+.before_footer{
+    height: 100px;
 }
 
-.rightnavelems {
-    right: 0px;
-    background-color: #2C3033;
-    opacity: 50%;
-    display: inline-block;
-    width: 100%;
-}
-
-footer {
+.footer {
+    color: white;
     background-color: #17263C;
     position: absolute;
     bottom: 0px;
     width: 100%;
 }
 
-.footer_element #contacts {
-    color: #FFFFFF;
+.footer_element {
+    text-align: center;
 }
 
-.footer_element #phone_number {
-    color: #FFFFFF;
+.center_nav_elements {
+    display: inline-block;
+    text-align: center;
+}
+
+.nav {
+    text-align: center;
+    background-color: #2C3033;
+    opacity: 50%;
+    position: relative;
+}
+
+.nav_header {
+    color: white;
+    font-weight: 600;
+}
+
+.right_nav_elements {
+    position: absolute;
+    right: 0px;
+    display: inline-block;
+}
+
+.footer_element .phone_number {
+    color: white;
+    display:inline-block;
+    padding: 10px;
 }
 
 #contacts {
     display:inline-block;
     margin-right:10px;
-}
-
-#phone_number {
-    display:inline-block;
 }
 
 .t{
