@@ -25,27 +25,45 @@ body {
     text-align: center;
 }
 
-.center_nav_elements {
-    display: inline-block;
-    text-align: center;
-}
-
 .nav {
     text-align: center;
     background-color: #2C3033;
-    opacity: 50%;
     position: relative;
+    height: 58px;
+    display: flex;
+    justify-content: center;
+}
+
+.center_nav_elements {
+    position: absolute;
+    display: inline-block;
+    align-items: center;
+    margin-left: auto;
 }
 
 .nav_header {
     color: white;
     font-weight: 600;
+    font-size: 30px;
+}
+
+.nav_header:hover {
+    color: #A1A1A1;
+    text-decoration: none;
 }
 
 .right_nav_elements {
     position: absolute;
     right: 0px;
     display: inline-block;
+}
+
+.login_register_buttons {
+    padding: 10px;
+}
+
+.profile_image {
+    object-fit: none;
 }
 
 .footer_element .phone_number {

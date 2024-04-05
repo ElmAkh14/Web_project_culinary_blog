@@ -1,3 +1,4 @@
+import sqlalchemy.orm
 from flask import Flask, request, render_template, redirect, session, make_response, abort, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user_register_form import UserRegisterForm
@@ -8,10 +9,13 @@ from data.user_model import User
 from data.article_model import Article
 from constants import *
 from datetime import timedelta
+from flask_restful import reqparse, abort, Api, Resource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365 * 2)
+
+api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -63,9 +67,9 @@ def register():
             surname=form.surname.data,
             name=form.name.data,
             age=form.age.data,
-            position=form.position.data,
             speciality=form.speciality.data,
             address=form.address.data,
+            about=form.about.data,
             email=form.email.data,
         )
         user.set_password(form.password.data)
@@ -100,6 +104,7 @@ def add_article():
         article.is_private = form.is_private.data
         db_sess.add(article)
         db_sess.commit()
+        print(form.ingredients.data)
         return redirect('/')
     return render_template('article_form.html', title='Добавление статьи',
                            form=form)
@@ -170,6 +175,33 @@ def not_found(error):
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
+
+
+def abort_if_news_not_found(article_id):
+    session_ = create_session()
+    article_ = session_.query(Article).get(id)
+    if not article_:
+        abort(404, message=f"News {article_id} not found")
+
+
+class ArticleResource(Resource):
+    def get(self, article_id):
+        abort_if_news_not_found(article_id)
+        session_ = create_session()
+        article_ = session_.query(Article).get(id)
+        return jsonify({'article': article_.to_dict(
+            only=('title', 'content', 'user_id', 'is_private'))})
+
+    def delete(self, article_id):
+        abort_if_news_not_found(article_id)
+        session_ = create_session()
+        article_ = session_.query(Article).get(article_id)
+        session.delete(article_)
+        session.commit()
+        return jsonify({'success': 'OK'})
+
+
+api.add_resource(ArticleResource, '/api/article/<int:article_id>')
 
 
 if __name__ == '__main__':

@@ -18,12 +18,12 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                              nullable=True)
     age = sqlalchemy.Column(sqlalchemy.Integer,
                             nullable=True)
-    position = sqlalchemy.Column(sqlalchemy.String,
-                                 nullable=True)
     speciality = sqlalchemy.Column(sqlalchemy.String,
                                    nullable=True)
     address = sqlalchemy.Column(sqlalchemy.String,
                                 nullable=True)
+    about = sqlalchemy.Column(sqlalchemy.Text,
+                              nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String,
                               unique=True, index=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String,
@@ -38,9 +38,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         self.surname = kwargs.get('surname', None)
         self.name = kwargs.get('name', None)
         self.age = kwargs.get('age', None)
-        self.position = kwargs.get('position', None)
         self.speciality = kwargs.get('speciality', None)
         self.address = kwargs.get('address', None)
+        self.about = kwargs.get('about', None)
         self.email = kwargs.get('email', None)
 
     def set_password(self, password):

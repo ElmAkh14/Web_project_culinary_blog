@@ -60,15 +60,6 @@
         {% endfor %}
     </p>
     <p>
-        {{ form.position.label }}<br>
-        {{ form.position(class="form-control") }}<br>
-        {% for error in form.position.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
         {{ form.speciality.label }}<br>
         {{ form.speciality(class="form-control") }}<br>
         {% for error in form.speciality.errors %}
@@ -81,6 +72,15 @@
         {{ form.address.label }}<br>
         {{ form.address(class="form-control") }}<br>
         {% for error in form.address.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.about.label }}<br>
+        {{ form.about(class="form-control") }}<br>
+        {% for error in form.about.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>

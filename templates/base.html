@@ -23,15 +23,15 @@
             <div class="right_nav_elements">
                 {% if current_user.is_authenticated %}
                     <a class="nav a" href="/profile">
-                        <img src="{{ url_for('static', filename='img/profile.png') }}" alt="">
+                        <img class="profile_image" src="{{ url_for('static', filename='img/profile.png') }}" alt="">
                     </a>
                 {% block nav_buttons %}{% endblock %}
                 {% else %}
+                    <div class="login_register_buttons">
+                        <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                        <a class="btn btn-success" href="/login">Войти</a>
+                    </div>
             </div>
-              <p>
-                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-                <a class="btn btn-success" href="/login">Войти</a>
-              </p>
             {% endif %}
         </div>
     </nav>
