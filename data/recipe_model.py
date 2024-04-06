@@ -5,13 +5,13 @@ from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
 
-class Article(SqlAlchemyBase):
+class Recipe(SqlAlchemyBase):
     __tablename__ = 'articles'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    dish_image = sqlalchemy.Column(sqlalchemy.BLOB,
+    dish_image = sqlalchemy.Column(sqlalchemy.String,
                                    nullable=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,

@@ -30,7 +30,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                                         nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now())
-    leader_job = orm.relationship("Article",
+    leader_job = orm.relationship("Recipe",
                                   back_populates='user')
 
     def __init__(self, **kwargs):

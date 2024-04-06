@@ -1,12 +1,13 @@
 import sqlalchemy.orm
-from flask import Flask, request, render_template, redirect, session, make_response, abort, jsonify
+import os
+from flask import Flask, request, render_template, redirect, session, make_response, abort, jsonify, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user_register_form import UserRegisterForm
 from forms.user_login_form import UserLoginForm
-from forms.article_form import ArticleForm
+from forms.recipe_form import RecipeForm
 from data.db_session import global_init, create_session
 from data.user_model import User
-from data.article_model import Article
+from data.recipe_model import Recipe
 from constants import *
 from datetime import timedelta
 from flask_restful import reqparse, abort, Api, Resource
@@ -21,6 +22,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+def img_to_bytes(img):
+    print(img)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = create_session()
@@ -30,8 +35,8 @@ def load_user(user_id):
 @app.route("/")
 def index():
     db_sess = create_session()
-    articles = db_sess.query(Article)
-    return render_template("index.html", title="Главная", articles=articles)
+    recipes = db_sess.query(Recipe).filter(Recipe.is_private == 0)
+    return render_template("index.html", title="Главная", recipes=recipes)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -82,7 +87,9 @@ def register():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', title=f"{current_user.name} {current_user.surname}")
+    db_sess = create_session()
+    recipes = db_sess.query(Recipe).filter(Recipe.user == current_user)
+    return render_template('profile.html', title=f"{current_user.name} {current_user.surname}", recipes=recipes)
 
 
 @app.route('/logout')
@@ -92,79 +99,79 @@ def logout():
     return redirect("/")
 
 
-@app.route('/add_article', methods=['GET', 'POST'])
+@app.route('/add_recipe', methods=['GET', 'POST'])
 @login_required
-def add_article():
-    form = ArticleForm()
+def add_recipe():
+    form = RecipeForm()
     if form.validate_on_submit():
         db_sess = create_session()
-        article = Article()
-        article.title = form.title.data
-        article.content = form.content.data
-        article.is_private = form.is_private.data
-        db_sess.add(article)
+        recipe = Recipe()
+        recipe.title = form.title.data
+        if request.files.get('dish_image'):
+            with open(f'static/users_img/{len(os.listdir("static/users_img")) + 1}.jpeg', 'wb') as file:
+                file.write(request.files.get('dish_image').read())
+            recipe.dish_image = f'{len(os.listdir("static/users_img"))}.jpeg'
+        recipe.content = form.content.data
+        recipe.is_private = form.is_private.data
+        recipe.user_id = current_user.id
+        db_sess.add(recipe)
         db_sess.commit()
-        print(form.ingredients.data)
         return redirect('/')
-    return render_template('article_form.html', title='Добавление статьи',
+    return render_template('recipe_form.html', title='Добавление статьи',
                            form=form)
 
 
-@app.route('/edit_article/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit_recipe/<int:_id>', methods=['GET', 'POST'])
 @login_required
-def edit_article(_id: int):
-    form = ArticleForm()
+def edit_recipe(_id: int):
+    form = RecipeForm()
     if request.method == "GET":
         db_sess = create_session()
-        article = db_sess.query(Article).filter((Article.id == _id),
-                                                (Article.team_leader_object == current_user) |
-                                                (current_user.id == 1)
-                                                ).first()
-        if article:
-            form.title.data = article.title
-            form.content.data = article.content
-            form.is_private.data = article.is_private
+        recipe = db_sess.query(Recipe).filter(Recipe.id == _id, Recipe.user == current_user).first()
+        if recipe:
+            form.title.data = recipe.title
+            form.dish_image.data = recipe.dish_image
+            form.content.data = recipe.content
+            form.is_private.data = recipe.is_private
         else:
             abort(404)
     if form.validate_on_submit():
         db_sess = create_session()
-        article = db_sess.query(Article).filter(Article.id == _id,
-                                                (Article.team_leader_object == current_user) |
-                                                (current_user.id == 1)
-                                                ).first()
-        if article:
-            article.title = form.title.data
-            article.content = form.content.data
-            article.is_private = form.is_private.data
+        recipe = db_sess.query(Recipe).filter(Recipe.id == _id, Recipe.user == current_user).first()
+        if recipe:
+            recipe.title = form.title.data
+            recipe.content = form.content.data
+            recipe.is_private = form.is_private.data
             db_sess.commit()
             return redirect('/')
         else:
             abort(404)
-    return render_template('article_form.html',
+    return render_template('recipe_form.html',
                            title='Редактирование статьи',
                            form=form
                            )
 
 
-@app.route('/delete_article/<int:id>', methods=['GET', 'POST'])
+@app.route('/delete_recipe/<int:_id>', methods=['GET', 'POST'])
 @login_required
-def delete_article(_id: int):
+def delete_recipe(_id: int):
     db_sess = create_session()
-    job = db_sess.query(Article).filter(Article.id == _id,
-                                        (Article.team_leader_object == current_user) |
-                                        (current_user.id == 1)
-                                        ).first()
-    if job:
-        db_sess.delete(job)
+    recipe = db_sess.query(Recipe).filter(Recipe.id == _id, Recipe.user == current_user).first()
+    if recipe:
+        if recipe.dish_image:
+            os.remove(f'static/users_img/{_id}.jpeg')
+        db_sess.delete(recipe)
         db_sess.commit()
     else:
         abort(404)
     return redirect('/')
 
 
-@app.route('/article')
-def article():
-    return render_template('article.html')
+@app.route('/recipe/<int:_id>')
+def recipe(_id: int):
+    db_sess = create_session()
+    recipe = db_sess.query(Recipe).filter(Recipe.id == _id).first()
+    return render_template('recipe.html', recipe=recipe)
 
 
 @app.errorhandler(404)
@@ -177,32 +184,31 @@ def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
-def abort_if_news_not_found(article_id):
+def abort_if_news_not_found(recipe_id):
     session_ = create_session()
-    article_ = session_.query(Article).get(id)
-    if not article_:
-        abort(404, message=f"News {article_id} not found")
+    recipe_ = session_.query(Recipe).get(recipe_id)
+    if not recipe_:
+        abort(404, message=f"Recipe {recipe_id} not found")
 
 
-class ArticleResource(Resource):
-    def get(self, article_id):
-        abort_if_news_not_found(article_id)
+class RecipeResource(Resource):
+    def get(self, recipe_id):
+        abort_if_news_not_found(recipe_id)
         session_ = create_session()
-        article_ = session_.query(Article).get(id)
-        return jsonify({'article': article_.to_dict(
+        recipe_ = session_.query(Recipe).get(id)
+        return jsonify({'recipe': recipe_.to_dict(
             only=('title', 'content', 'user_id', 'is_private'))})
 
-    def delete(self, article_id):
-        abort_if_news_not_found(article_id)
+    def delete(self, recipe_id):
+        abort_if_news_not_found(recipe_id)
         session_ = create_session()
-        article_ = session_.query(Article).get(article_id)
-        session.delete(article_)
+        recipe_ = session_.query(Recipe).get(recipe_id)
+        session.delete(recipe_)
         session.commit()
         return jsonify({'success': 'OK'})
 
 
-api.add_resource(ArticleResource, '/api/article/<int:article_id>')
-
+api.add_resource(RecipeResource, '/api/recipe/<int:recipe_id>')
 
 if __name__ == '__main__':
     global_init(db_file)

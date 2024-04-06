@@ -1,0 +1,17 @@
+.recipe_header {
+    text-align: center;
+}
+
+.recipe_img {
+    display: flex;
+    justify-content: left;
+}
+
+.recipe_img > img {
+    border-radius: 20px;
+}
+
+.recipe_content_text {
+    text-indent: 45px;
+    padding-top: 15px;
+}

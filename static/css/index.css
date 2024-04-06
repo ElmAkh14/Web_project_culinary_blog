@@ -5,7 +5,7 @@
 .all_recipes {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); /* Ширина каждого столбца - 30% */
-    gap: 10px; /* Отступ между блоками */
+    gap: 30px; /* Отступ между блоками */
 }
 
 .recipe {

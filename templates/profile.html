@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
 
 {% block nav_buttons %}
@@ -12,7 +12,25 @@
 <div class="profile_header">
     <h1>{{ current_user.name }} {{ current_user.surname }}</h1>
 </div>
-{% if current_user.is_authenticated %}
-    <a href="add_article" class="btn btn-secondary">Опубликовать рецепт</a>
-{% endif %}
+<div class="add_recipe_button">
+    <a href="add_recipe" class="btn btn-secondary">Опубликовать рецепт</a>
+</div>
+<div class="all_recipes">
+{% for recipe in recipes %}
+<div class="recipe">
+    <div class="recipe_img">
+        <img src="static/users_img/{{ recipe.dish_image }}" width="300" height="300"
+             onerror="this.src='static/img/default_image.jpg';">
+    </div>
+    <div class="recipe-content">
+        <p class="recipe-tags">
+            <span class="recipe-tag">Gluten Free</span>
+            <span class="recipe-tag">Main dish</span>
+        </p>
+
+        <div class="recipe-title"><h1 class="recipe-title"><a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a></h1></div>
+    </div>
+</div>
+{% endfor %}
+</div>
 {% endblock %}

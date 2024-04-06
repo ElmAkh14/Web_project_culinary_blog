@@ -8,8 +8,8 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {% block styles %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <title>{{title}}</title>
 </head>
 <body>
@@ -22,10 +22,12 @@
             </div>
             <div class="right_nav_elements">
                 {% if current_user.is_authenticated %}
-                    <a class="nav a" href="/profile">
-                        <img class="profile_image" src="{{ url_for('static', filename='img/profile.png') }}" alt="">
-                    </a>
-                {% block nav_buttons %}{% endblock %}
+                    <div class="nav_buttons_authenticated">
+                        <a class="nav a" href="/profile">
+                            <img class="profile_image" src="{{ url_for('static', filename='img/profile.png') }}" alt="">
+                        </a>
+                        {% block nav_buttons %}{% endblock %}
+                    </div>
                 {% else %}
                     <div class="login_register_buttons">
                         <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
@@ -38,15 +40,20 @@
 </header>
 <!-- Begin page content -->
 <main role="main" class="container">
+    <div class="content">
     {% block content %}{% endblock %}
+    </div>
 </main>
-<div class="before_footer"></div>
 <footer>
     <div class="footer">
         <div class="footer_element">
-            <p id="contacts">Наши контакты</p>
-            <a class="phone_number" href="tel:+79527757028">+7-952-775-70-28</a>
-            <a class="phone_number" href="tel:88002233222">8(800)223-32-22</a>
+            <p class="footer_element_title">Наши контакты</p>
+            <a class="footer_element_data" href="tel:+79527757028">+7-952-775-70-28</a>
+            <a class="footer_element_data" href="tel:88002233222">8(800)223-32-22</a>
+        </div>
+        <div class="footer_element">
+            <p class="footer_element_title">Электронная почта</p>
+            <a class="footer_element_data" href="mailto:akhmedoffelman@yandex.ru">akhmedoffelman@yandex.ru</a>
         </div>
     </div>
 </footer>

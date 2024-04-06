@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -9,10 +9,10 @@
     <h1>Рецепты</h1>
 </div>
 <div class="all_recipes">
-{% for article in articles %}
+{% for recipe in recipes %}
 <div class="recipe">
     <div class="recipe_img">
-      <img src="{{ article.dish_image }}" width="300" height="300" onerror="this.src='static/img/default_image.jpg';">
+      <img src="static/users_img/{{ recipe.dish_image }}" width="300" height="300" onerror="this.src='static/img/default_image.jpg';">
     </div>
     <div class="recipe-content">
       <p class="recipe-tags">
@@ -20,10 +20,14 @@
         <span class="recipe-tag">Main dish</span>
       </p>
 
-      <div class="recipe-title"><h1 class="recipe-title"><a href="/article">{{ article.title }}</a></h1></div>
+      <div class="recipe-title"><h1 class="recipe-title"><a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a></h1></div>
 
     </div>
 </div>
 {% endfor %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<!--<script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script> -->
 {% endblock %}

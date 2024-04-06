@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/recipe.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="recipe_header">
+    <h1>{{ recipe.title }}</h1>
+</div>
+<div class="recipe_img">
+    <img src="/static/users_img/{{ recipe.dish_image }}" width="300" height="300" onerror="this.src='/static/img/default_image.jpg';">
+</div>
+<div class="recipe_content">
+    <p class="recipe_content_text">{{ recipe.content }}</p>
+</div>
+{% if current_user.is_authenticated and current_user == recipe.user %}
+<div class="buttons">
+    <a href="/edit_recipe/{{ recipe.id }}" class="btn btn-warning">
+        Изменить
+    </a>
+    <a href="/delete_recipe/{{ recipe.id }}" class="btn btn-danger">
+        Удалить
+    </a>
+</div>
+{% endif %}
+{% endblock %}
