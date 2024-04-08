@@ -14,6 +14,9 @@
 <div class="recipe_content">
     <p class="recipe_content_text">{{ recipe.content }}</p>
 </div>
+<div class="recipe_created_date">
+    <p>{{ recipe.created_date }}</p>
+</div>
 {% if current_user.is_authenticated and current_user == recipe.user %}
 <div class="buttons">
     <a href="/edit_recipe/{{ recipe.id }}" class="btn btn-warning">

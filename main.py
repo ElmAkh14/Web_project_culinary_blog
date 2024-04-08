@@ -1,3 +1,4 @@
+import datetime
 import sqlalchemy.orm
 import os
 from flask import Flask, request, render_template, redirect, session, make_response, abort, jsonify, url_for
@@ -8,7 +9,6 @@ from forms.recipe_form import RecipeForm
 from data.db_session import global_init, create_session
 from data.user_model import User
 from data.recipe_model import Recipe
-from constants import *
 from datetime import timedelta
 from flask_restful import reqparse, abort, Api, Resource
 
@@ -16,7 +16,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365 * 2)
 
+db_file = 'db/culinary blog.sqlite'
+
 api = Api(app)
+
+parser = reqparse.RequestParser()
+parser.add_argument('title', required=True)
+parser.add_argument('content', required=True)
+parser.add_argument('is_private', required=True, type=bool)
+parser.add_argument('user_id', required=True, type=int)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -141,6 +149,7 @@ def edit_recipe(_id: int):
         if recipe:
             recipe.title = form.title.data
             recipe.content = form.content.data
+            recipe.created_date = datetime.datetime.now().strftime("%B %d, %Y")
             recipe.is_private = form.is_private.data
             db_sess.commit()
             return redirect('/')
@@ -184,7 +193,7 @@ def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
-def abort_if_news_not_found(recipe_id):
+def abort_if_recipe_not_found(recipe_id):
     session_ = create_session()
     recipe_ = session_.query(Recipe).get(recipe_id)
     if not recipe_:
@@ -193,14 +202,14 @@ def abort_if_news_not_found(recipe_id):
 
 class RecipeResource(Resource):
     def get(self, recipe_id):
-        abort_if_news_not_found(recipe_id)
+        abort_if_recipe_not_found(recipe_id)
         session_ = create_session()
-        recipe_ = session_.query(Recipe).get(id)
+        recipe_ = session_.query(Recipe).get(recipe_id)
         return jsonify({'recipe': recipe_.to_dict(
-            only=('title', 'content', 'user_id', 'is_private'))})
+            only=('title', 'dish_image', 'content', 'is_private', 'user_id'))})
 
     def delete(self, recipe_id):
-        abort_if_news_not_found(recipe_id)
+        abort_if_recipe_not_found(recipe_id)
         session_ = create_session()
         recipe_ = session_.query(Recipe).get(recipe_id)
         session.delete(recipe_)
@@ -208,9 +217,34 @@ class RecipeResource(Resource):
         return jsonify({'success': 'OK'})
 
 
+class RecipeListResource(Resource):
+    def get(self):
+        session = create_session()
+        recipes = session.query(Recipe).all()
+        return jsonify({'news': [recipe.to_dict(
+            only=('title', 'content', 'user_id')) for recipe in recipes]})
+
+    def post(self):
+        args = parser.parse_args()
+        session = create_session()
+        recipe = Recipe(
+            title=args['title'],
+            content=args['content'],
+            user_id=args['user_id'],
+            is_private=args['is_private']
+        )
+        session.add(recipe)
+        session.commit()
+        return jsonify({'id': recipe.id})
+
+
 api.add_resource(RecipeResource, '/api/recipe/<int:recipe_id>')
+
+api.add_resource(RecipeListResource, '/api/recipes')
 
 if __name__ == '__main__':
     global_init(db_file)
     app.debug = True
     app.run(host='192.168.0.103')
+
+    print()
