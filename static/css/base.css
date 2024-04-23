@@ -6,12 +6,11 @@ body {
 .main {
     color: white;
     position: relative;
+    min-height: 100vh;
 }
-
 .content {
-    min-height: 449px;
+    min-height: 100%;
 }
-
 .nav {
     text-align: center;
     background-color: #2C3033;
@@ -58,12 +57,11 @@ body {
 .footer {
     color: white;
     background-color: #17263C;
-    position: absolute;
-    bottom: 0px;
     width: 100%;
     clear: both;
     margin-top: 50px;
-    position: relative;
+    position: absolute;
+    bottom: 0;
 }
 
 .footer_element {

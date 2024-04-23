@@ -245,6 +245,6 @@ api.add_resource(RecipeListResource, '/api/recipes')
 if __name__ == '__main__':
     global_init(db_file)
     app.debug = True
-    app.run(host='192.168.0.103')
+    app.run(host='127.0.0.1')
 
     print()
