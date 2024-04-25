@@ -12,6 +12,6 @@ class RecipeForm(FlaskForm):
     title = StringField('Заголовок', validators=[DataRequired()])
     dish_image = FileField('Картинка')
     # ingredients = FieldList(Ingredients('Ингредиенты'), validators=[DataRequired()], min_entries=1)
-    content = TextAreaField("Содержание", validators=[DataRequired()])
-    is_private = BooleanField("Личное")
+    content = TextAreaField('Содержание', validators=[DataRequired()])
+    is_private = BooleanField('Личное')
     submit = SubmitField('Применить')
