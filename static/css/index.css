@@ -9,15 +9,19 @@
 }
 
 .recipe {
-    background-color: #2C3033;
+    background-color: #013500;
     border-radius: 20px;
     width: 350px;
     padding: 10px;
 }
 
-.recipe_img {
+.recipe_img_box {
     display: flex;
     justify-content: center;
+}
+
+.recipe_img {
+    border-radius: 20px;
 }
 
 .recipe-title {

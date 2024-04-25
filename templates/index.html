@@ -11,8 +11,8 @@
 <div class="all_recipes">
     {% for recipe in recipes %}
     <div class="recipe">
-        <div class="recipe_img">
-            <img src="static/users_img/{{ recipe.dish_image }}" width="300" height="300"
+        <div class="recipe_img_box">
+            <img class="recipe_img" src="static/users_img/{{ recipe.dish_image }}" width="300" height="300"
                  onerror="this.src='static/img/default_image.jpg';">
         </div>
         <div class="recipe-content">

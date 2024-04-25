@@ -1,6 +1,5 @@
 body {
-    background-color: #192020; /*url('/static/img/background image.jpg')*/
-    background-size: cover;
+    background-color: #E8E1DB;
 }
 
 .main {
@@ -10,10 +9,11 @@ body {
 }
 .content {
     min-height: 100%;
+    color: #013500;
 }
 .nav {
     text-align: center;
-    background-color: #2C3033;
+    background-color: #013500;
     position: relative;
     height: 58px;
     display: flex;
@@ -56,7 +56,7 @@ body {
 
 .footer {
     color: white;
-    background-color: #17263C;
+    background-color: #013500;
     width: 100%;
     clear: both;
     margin-top: 50px;
