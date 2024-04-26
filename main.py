@@ -13,6 +13,8 @@ from datetime import timedelta
 from flask_restful import reqparse, abort, Api, Resource
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365 * 2)
 
 db_file = 'db/culinary blog.sqlite'
 
