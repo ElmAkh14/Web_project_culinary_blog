@@ -5,7 +5,7 @@ body {
 .main {
     color: white;
     position: relative;
-    min-height: 100vh;
+    min-height: 200vh;
 }
 .content {
     min-height: 100%;

@@ -23,15 +23,6 @@
     {% endfor %}
     </p>
     <p>
-        {{ form.ingredients.label }}<br>
-        {{ form.ingredients() }}<br>
-            {% for error in form.dish_image.errors %}
-    <p class="alert alert-danger" role="alert">
-        {{ error }}
-    </p>
-    {% endfor %}
-    </p>
-    <p>
         {{ form.content.label }}<br>
         {{ form.content(class="form-control") }}<br>
         {% for error in form.content.errors %}
