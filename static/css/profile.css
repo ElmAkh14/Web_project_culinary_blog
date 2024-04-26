@@ -19,9 +19,13 @@
     padding: 10px;
 }
 
-.recipe_img {
+.recipe_img_box {
     display: flex;
     justify-content: center;
+}
+
+.recipe_img {
+    border-radius: 20px;
 }
 
 .recipe-title {
