@@ -7,7 +7,7 @@ from .db_session import SqlAlchemyBase
 
 
 class Recipe(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = 'articles'
+    __tablename__ = 'recipes'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)

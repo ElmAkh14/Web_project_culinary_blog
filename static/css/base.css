@@ -5,7 +5,7 @@ body {
 .main {
     color: white;
     position: relative;
-    min-height: 200vh;
+    min-height: 100vh;
 }
 .content {
     min-height: 100%;
@@ -60,8 +60,6 @@ body {
     width: 100%;
     clear: both;
     margin-top: 50px;
-    position: absolute;
-    bottom: 0;
 }
 
 .footer_element {

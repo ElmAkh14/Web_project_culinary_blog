@@ -1,5 +1,4 @@
 import datetime
-import sqlalchemy.orm
 import os
 from flask import Flask, request, render_template, redirect, session, make_response, abort, jsonify, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -28,10 +27,6 @@ parser.add_argument('user_id', required=True, type=int)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-def img_to_bytes(img):
-    print(img)
 
 
 @login_manager.user_loader
@@ -88,7 +83,8 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        login_user(user, remember=True)
+        return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -97,7 +93,8 @@ def register():
 def profile():
     db_sess = create_session()
     recipes = db_sess.query(Recipe).filter(Recipe.user == current_user)
-    return render_template('profile.html', title=f"{current_user.name} {current_user.surname}", recipes=recipes)
+    return render_template('profile.html', title=f"{current_user.name} {current_user.surname}",
+                           recipes=recipes)
 
 
 @app.route('/logout')
@@ -221,8 +218,8 @@ class RecipeListResource(Resource):
     def get(self):
         session = create_session()
         recipes = session.query(Recipe).all()
-        return jsonify({'news': [recipe.to_dict(
-            only=('title', 'content', 'user_id')) for recipe in recipes]})
+        return jsonify({'recipes': [recipe.to_dict(only=('title', 'content', 'user_id'))
+                                    for recipe in recipes]})
 
     def post(self):
         args = parser.parse_args()
@@ -245,4 +242,4 @@ api.add_resource(RecipeListResource, '/api/recipes')
 if __name__ == '__main__':
     global_init(db_file)
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='localhost', port=8000)
